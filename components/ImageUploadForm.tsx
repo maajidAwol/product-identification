@@ -69,8 +69,8 @@ export default function ImageUploadForm() {
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 {previewUrl ? (
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <img src={previewUrl} alt="Preview" className="max-h-full max-w-full object-contain rounded" />
+                  <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded">
+                    <img src={previewUrl} alt="Preview" className="h-64 sm:h-80 max-w-full overflow-hidden" />
                     {!isLoading && (
                       <Button
                         type="button"
@@ -82,8 +82,7 @@ export default function ImageUploadForm() {
                         <X className="h-4 w-4" />
                       </Button>
                     )}
-                  </div>
-                ) : (
+                  </div>    ) : (
                   <>
                     <Upload className="w-10 h-10 mb-3 text-gray-400" />
                     <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
