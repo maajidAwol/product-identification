@@ -1,163 +1,11 @@
-// // 'use client'
 
-// // import { useEffect, useState } from 'react'
-
-// // interface ObjectDetection {
-// //   name: string
-// //   score: number
-// // }
-
-// // interface ProductInfo {
-// //   name: string
-// //   brand: string
-// //   model: string
-// //   size: string
-// // }
-
-// // interface AnalysisResult {
-// //   objects: ObjectDetection[]
-// //   productInfo: ProductInfo
-// // }
-
-// // export default function ResultsDisplay() {
-// //   const [result, setResult] = useState<AnalysisResult | null>(null)
-
-// //   useEffect(() => {
-// //     const fetchResults = async () => {
-// //       // In a real application, you would fetch the results from your backend here
-// //       // For this example, we'll use mock data
-// //       const mockResult: AnalysisResult = {
-// //         objects: [
-// //           { name: 'Smartphone', score: 0.95 },
-// //           { name: 'Laptop', score: 0.87 },
-// //         ],
-// //         productInfo: {
-// //           name: 'iPhone 12 Pro',
-// //           brand: 'Apple',
-// //           model: '12 Pro',
-// //           size: '6.1 Inch',
-// //         },
-// //       }
-// //       setResult(mockResult)
-// //     }
-
-// //     fetchResults()
-// //   }, [])
-
-// //   if (!result) {
-// //     return null
-// //   }
-
-// //   return (
-// //     <div className="mt-8">
-// //       <h2 className="text-2xl font-bold mb-4">Analysis Results</h2>
-// //       <div className="bg-gray-50 p-4 rounded-md mb-4">
-// //         <h3 className="text-lg font-semibold mb-2">Detected Objects</h3>
-// //         <ul className="list-disc pl-5">
-// //           {result.objects.map((obj, index) => (
-// //             <li key={index}>
-// //               {obj.name} (Confidence: {(obj.score * 100).toFixed(2)}%)
-// //             </li>
-// //           ))}
-// //         </ul>
-// //       </div>
-// //       <div className="bg-gray-50 p-4 rounded-md">
-// //         <h3 className="text-lg font-semibold mb-2">Product Information</h3>
-// //         <p><strong>Name:</strong> {result.productInfo.name}</p>
-// //         <p><strong>Brand:</strong> {result.productInfo.brand}</p>
-// //         <p><strong>Model:</strong> {result.productInfo.model}</p>
-// //         <p><strong>Size:</strong> {result.productInfo.size}</p>
-// //       </div>
-// //     </div>
-// //   )
-// // }
-
-// 'use client'
-
-// import { useEffect, useState } from 'react'
-
-// interface ObjectDetection {
-//   name: string
-//   score: number
-// }
-
-// interface ProductInfo {
-//   name: string
-//   brand: string
-//   model: string
-//   size: string
-// }
-
-// interface AnalysisResult {
-//   objects: ObjectDetection[]
-//   productInfo: ProductInfo
-// }
-
-// export default function ResultsDisplay() {
-//   const [result, setResult] = useState<AnalysisResult | null>(null)
-
-//   useEffect(() => {
-//     const fetchResults = async () => {
-//       try {
-//         const response = await fetch('/api/analysis-results')
-//         if (response.ok) {
-//           const data = await response.json()
-//           setResult(data)
-//         }
-//       } catch (error) {
-//         console.error('Error fetching analysis results:', error)
-//       }
-//     }
-
-//     fetchResults()
-//   }, [])
-
-//   if (!result) {
-//     return null
-//   }
-
-//   return (
-//     <div className="mt-8 space-y-6">
-//       <h2 className="text-2xl font-bold text-gray-900">Analysis Results</h2>
-//       <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-//         <h3 className="text-lg font-semibold text-gray-900 mb-4">Detected Objects</h3>
-//         <ul className="space-y-2">
-//           {result.objects.map((obj, index) => (
-//             <li key={index} className="flex items-center space-x-2">
-//               <span className="inline-block w-2 h-2 rounded-full bg-indigo-500"></span>
-//               <span className="text-gray-700">{obj.name} (Confidence: {(obj.score * 100).toFixed(2)}%)</span>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//       <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-//         <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Information</h3>
-//         <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-//           <div>
-//             <dt className="text-sm font-medium text-gray-500">Name</dt>
-//             <dd className="mt-1 text-sm text-gray-900">{result.productInfo.name}</dd>
-//           </div>
-//           <div>
-//             <dt className="text-sm font-medium text-gray-500">Brand</dt>
-//             <dd className="mt-1 text-sm text-gray-900">{result.productInfo.brand}</dd>
-//           </div>
-//           <div>
-//             <dt className="text-sm font-medium text-gray-500">Model</dt>
-//             <dd className="mt-1 text-sm text-gray-900">{result.productInfo.model}</dd>
-//           </div>
-//           <div>
-//             <dt className="text-sm font-medium text-gray-500">Size</dt>
-//             <dd className="mt-1 text-sm text-gray-900">{result.productInfo.size}</dd>
-//           </div>
-//         </dl>
-//       </div>
-//     </div>
-//   )
-// }
 
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Download } from 'lucide-react'
 
 interface ProductInfo {
   name: string
@@ -174,24 +22,31 @@ interface AnalysisResult {
 
 export default function ResultsDisplay() {
   const [result, setResult] = useState<AnalysisResult | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const handleAnalysisComplete = (event: CustomEvent<AnalysisResult>) => {
       setResult(event.detail)
+      setIsLoading(false)
+    }
+
+    const handleAnalysisStart = () => {
+      setIsLoading(true)
+      setResult(null)
     }
 
     window.addEventListener('analysisComplete', handleAnalysisComplete as EventListener)
+    window.addEventListener('analysisStart', handleAnalysisStart as EventListener)
 
     return () => {
       window.removeEventListener('analysisComplete', handleAnalysisComplete as EventListener)
+      window.removeEventListener('analysisStart', handleAnalysisStart as EventListener)
     }
   }, [])
 
-  if (!result) {
-    return null
-  }
-
   const handleDownloadCSV = () => {
+    if (!result) return
+
     const headers = ['Product Name', 'Brand', 'Model', 'Size', 'Average Price']
     const data = [
       result.productInfo.name,
@@ -219,51 +74,92 @@ export default function ResultsDisplay() {
     }
   }
 
+  if (isLoading) {
+    return <LoadingSkeleton />
+  }
+
+  if (!result) {
+    return null
+  }
+
   return (
-    <div className="mt-8 space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Analysis Results</h2>
-      <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Detected Objects</h3>
-        <ul className="space-y-2">
-          {result.objects.map((obj, index) => (
-            <li key={index} className="flex items-center space-x-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-indigo-500"></span>
-              <span className="text-gray-700">{obj.name} (Confidence: {(obj.score * 100).toFixed(2)}%)</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Information</h3>
-        <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Name</dt>
-            <dd className="mt-1 text-sm text-gray-900">{result.productInfo.name}</dd>
-          </div>
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Brand</dt>
-            <dd className="mt-1 text-sm text-gray-900">{result.productInfo.brand}</dd>
-          </div>
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Model</dt>
-            <dd className="mt-1 text-sm text-gray-900">{result.productInfo.model}</dd>
-          </div>
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Size</dt>
-            <dd className="mt-1 text-sm text-gray-900">{result.productInfo.size}</dd>
-          </div>
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Average Price</dt>
-            <dd className="mt-1 text-sm text-gray-900">{result.productInfo.averagePrice}</dd>
-          </div>
-        </dl>
-      </div>
-      <button
+    <div className="mt-8 space-y-6 max-w-3xl mx-auto">
+      <h2 className="text-3xl font-bold text-gray-900">Analysis Results</h2>
+      <Card>
+        <CardHeader>
+          <CardTitle>Detected Objects</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2">
+            {result.objects.map((obj, index) => (
+              <li key={index} className="flex items-center space-x-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-primary"></span>
+                <span className="text-gray-700">{obj.name} (Confidence: {(obj.score * 100).toFixed(2)}%)</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Product Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+            {Object.entries(result.productInfo).map(([key, value]) => (
+              <div key={key}>
+                <dt className="text-sm font-medium text-gray-500 capitalize">{key}</dt>
+                <dd className="mt-1 text-sm text-gray-900">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </CardContent>
+      </Card>
+      <Button
         onClick={handleDownloadCSV}
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+        className="w-full bg-green-600 hover:bg-green-700 text-white"
       >
-        Download CSV
-      </button>
+        <Download className="mr-2 h-4 w-4" /> Download CSV
+      </Button>
+    </div>
+  )
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="mt-8 space-y-6 max-w-3xl mx-auto">
+      <div className="h-8 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+      <Card>
+        <CardHeader>
+          <div className="h-6 bg-gray-200 rounded w-1/4 animate-pulse"></div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center space-x-2">
+                <div className="w-2 h-2 rounded-full bg-gray-200 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <div className="h-6 bg-gray-200 rounded w-1/4 animate-pulse"></div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i}>
+                <div className="h-4 bg-gray-200 rounded w-1/4 animate-pulse"></div>
+                <div className="mt-1 h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      <div className="h-10 bg-gray-200 rounded w-full animate-pulse"></div>
     </div>
   )
 }
