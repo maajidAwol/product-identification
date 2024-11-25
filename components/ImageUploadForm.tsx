@@ -223,7 +223,7 @@ export default function ImageUploadForm() {
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 {previewUrl ? (
                   <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded">
-                    <img src={previewUrl} alt="Preview" className="h-full w-full object-cover" />
+                    <img src={previewUrl} alt="Preview" className="h-48 sm:h-64 md:h-80 w-full object-cover" />
                     {!isLoading && (
                       <Button
                         type="button"
